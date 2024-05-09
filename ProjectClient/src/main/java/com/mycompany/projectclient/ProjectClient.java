@@ -1,16 +1,16 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Server;
+
+package com.mycompany.projectclient;
 
 /**
  *
  * @author metinkagit
  */
-public class Server {
-    
+public class ProjectClient {
+
     public static void main(String[] args) {
-        System.out.println("Hello from server!");
+        System.out.println("Hello World!");
     }
 }
