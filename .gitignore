@@ -24,3 +24,9 @@ hs_err_pid*
 replay_pid*
 /target/
 /Server/target/
+/ProjectServer/target/
+/ProjectClient/target/
+/ProjectManagementServer/nbproject/private/
+/ProjectManagementServer/build/
+/ProjectManagementServer/dist/
+/ProjectManagementClient/target/
