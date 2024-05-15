@@ -193,7 +193,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_loginActionPerformed
     private void openHomePageForm() {
         // Create a new instance of your StartPageForm class (or equivalent)
-        Frm_HomePage homePageForm = new Frm_HomePage();
+        Frm_HomePage homePageForm = new Frm_HomePage(this.client);
         homePageForm.show();
         dispose();
         //startPageForm.setVisible(true);

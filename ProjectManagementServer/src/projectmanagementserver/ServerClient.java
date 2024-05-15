@@ -82,6 +82,12 @@ public class ServerClient extends Thread {
         ClientDAO.authenticateUser(jsonObject, serverClient);
     }
 
+    public void CreateProjectProcess(JSONObject jsonObject) throws IOException {
+
+        ServerClient serverClient = new ServerClient(this.socket, this.server);
+        ProjectDAO.CreateProject(jsonObject, serverClient);
+    }
+
     @Override
     public void run() {
         try {
@@ -96,12 +102,14 @@ public class ServerClient extends Thread {
 
                     System.out.println("code : " + code);
                     if (code.equals("000")) {
-                        System.out.println("Log 2");
+                        System.out.println("Log 21");
                         RegisterProcess(jsonObject);
-
                     } else if (code.equals("001")) {
                         System.out.println("Log 22");
                         LoginProcess(jsonObject);
+                    } else if (code.equals("002")) {
+                        System.out.println("Log 23");
+                        CreateProjectProcess(jsonObject);
                     }
                 }
 

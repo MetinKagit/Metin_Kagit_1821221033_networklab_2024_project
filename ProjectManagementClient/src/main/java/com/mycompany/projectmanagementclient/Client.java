@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -24,6 +25,7 @@ import org.json.JSONObject;
  */
 public class Client extends Thread {
 
+    int clientId;
     BufferedReader reader;
     PrintWriter writer;
     String username;
@@ -35,6 +37,7 @@ public class Client extends Thread {
     int serverPort;
     boolean isListening;
     boolean process;
+    String[] projects;
 
     public Client(String serverAddress, int serverPort, String username, String password) throws IOException {
         this.socket = new Socket(serverAddress, serverPort);
@@ -109,7 +112,7 @@ public class Client extends Thread {
                         this.process = true;
                         Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
                         break;
-                    }else if (code.equals("000") && response.equals("false")) {
+                    } else if (code.equals("000") && response.equals("false")) {
                         this.process = false;
                         Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
                         break;
@@ -146,13 +149,38 @@ public class Client extends Thread {
 
                     String code = responseJsonObject.getString("code");
                     String response = responseJsonObject.getString("processDone");
-                    System.out.println("Code: " + code + ", processDone: " + response);
+                    String userId = responseJsonObject.getString("userId");
+                    this.clientId = Integer.parseInt(userId);
+                            
+                    JSONArray projectArray = new JSONArray();
+                    if (responseJsonObject.has("projectArray")) {
+                        projectArray = responseJsonObject.getJSONArray("projectArray");
+                        System.out.println("Project Array: " + projectArray.toString());
+                    }
 
+                    this.projects = new String[projectArray.length()];
+                    for (int i = 0; i < projectArray.length(); i++) {
+                        this.projects[i] = projectArray.getString(i);
+                        System.out.println("Project Array: " + this.projects[i]);
+                    }
+                    for (String project : this.projects) {
+                        String[] projectDetails = project.split(", ");
+                        String id = projectDetails[0];
+                        String title = projectDetails[1];
+                        String key = projectDetails[2];
+                        Frm_HomePage.lst_userProjects_model.addElement(id + "  |  " + title + "  |  " + key);
+                    }
+                    System.out.println("log11");
+                    // Print the Java array
+
+                    // System.out.println("----Code: " + code + ", processDone: " + response + "Projects: " + projectArray);
+                    System.out.println("log12");
                     if (code.equals("001") && response.equals("true")) {
+                        //GetProjectByUser(responseJsonObject);
                         this.process = true;
                         Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
                         break;
-                    }else if (code.equals("001") && response.equals("false")) {
+                    } else if (code.equals("001") && response.equals("false")) {
                         this.process = false;
                         Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
                         break;
@@ -171,6 +199,52 @@ public class Client extends Thread {
         }
     }
 
+    public void CreateProject(JSONObject jsonObject){
+        String jsonString = jsonObject.toString();
+
+        // Send JSON string to server
+        this.writer = new PrintWriter(this.output, true);
+        writer.println(jsonString);
+        
+         // Create a new thread to read the response from the server
+        Thread createProjectThread = new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    String message = this.reader.readLine();
+                    JSONObject responseJsonObject = new JSONObject(message);
+
+                    String code = responseJsonObject.getString("code");
+                    String response = responseJsonObject.getString("processDone");
+                    String projectId = responseJsonObject.getString("projectId");
+                    String title =responseJsonObject.getString("title");
+                    String key  =responseJsonObject.getString("projectKey");
+                    System.out.println("Code: " + code + "processDone: " + response);
+
+                    if (code.equals("002") && response.equals("true")) {
+                        Frm_HomePage.lst_userProjects_model.addElement(projectId + "  |  " + title + "  |  " + key);
+                        this.process = true;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    } else if (code.equals("020") && response.equals("false")) {
+                        this.process = false;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No data available to read.");
+                // Handle the case where no data is available
+            }
+        });
+
+        createProjectThread.start();
+
+        try {
+            createProjectThread.join(); // Wait for the responseThread to finish
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void run() {
         //try {

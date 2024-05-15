@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -79,17 +80,26 @@ public class ClientDAO {
                             // Get the stored password from the database
                             String storedPassword = resultSet.getString("password");
                             String storedClientName = resultSet.getString("name");
-                            System.out.println("--" + storedClientName);
-                            System.out.println("---" + storedPassword);
+                            String userId = resultSet.getString("id");
+                            
+
                             // Check if the provided password matches the stored password
                             if (storedPassword.equals(password)) {
                                 System.out.println("log88");
                                 isAuthenticated = true;
                                 // Passwords match, authentication successful
                                 // Send authentication result to client
+                                jsonObject.put("userId", userId);
                                 jsonObject.put("processDone", "true");
+
+                                String[] projectArray = GetProjectByUser(jsonObject, serverClient);
+                                JSONArray jsonArray = new JSONArray();
+                                for (String str : projectArray) {
+                                    jsonArray.put(str);
+                                }
+                                jsonObject.put("projectArray", jsonArray);
                                 serverClient.SendMessage(jsonObject);
-                            }else{
+                            } else {
                                 System.out.println("log89");
                                 serverClient.SendMessage(jsonObject);
                                 return isAuthenticated;
@@ -105,5 +115,60 @@ public class ClientDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static String[] GetProjectByUser(JSONObject jsonObject, ServerClient serverClient) throws IOException {
+        String[] projects = null;
+        String userId = jsonObject.getString("userId");
+
+        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
+            // SQL query
+            String sql = "SELECT networkdb.projects.project_id, "
+                    + "networkdb.projects.title, "
+                    + "networkdb.projects.project_key, "
+                    + "networkdb.project_members.is_manager "
+                    + "FROM networkdb.projects "
+                    + "JOIN networkdb.project_members "
+                    + "ON networkdb.projects.project_id = networkdb.project_members.project_id "
+                    + "WHERE networkdb.project_members.member_id = ?";
+
+            // Create a prepared statement        
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            preparedStatement.setInt(1, Integer.parseInt(userId));
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Count the number of rows in the result set
+            int rowCount = 0;
+            if (resultSet.last()) {
+                rowCount = resultSet.getRow();
+                resultSet.beforeFirst(); // Move the cursor back to before the first row
+            }
+
+            // Initialize the result array
+            projects = new String[rowCount];
+
+            // Process the result set
+            int i = 0;
+            while (resultSet.next()) {
+                // Build the string representation of each row
+                String projectKey = resultSet.getBoolean("is_manager") ? resultSet.getString("project_key") : "-";
+                String row = resultSet.getInt("project_id") + ", "
+                        + resultSet.getString("title") + ", "
+                        + projectKey + ", "
+                        + resultSet.getBoolean("is_manager");
+                projects[i] = row;
+                i++;
+            }
+
+            for (String row : projects) {
+                System.out.println(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return projects;
     }
 }
