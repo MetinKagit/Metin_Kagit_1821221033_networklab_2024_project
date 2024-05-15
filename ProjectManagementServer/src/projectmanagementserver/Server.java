@@ -61,16 +61,15 @@ public class Server extends Thread{
         }
     }
 
-//    public void AddClient(ServerClient serverClient) {
-//        this.clientList.add(serverClient);
-//    }
-//
-//    public void RemoveClient(ServerClient serverClient) {
-//        this.clientList.remove(serverClient);
-//    }
-//
-//    public ServerClient GetClientByIndex(int index) {
-//        
+    public void AddClient(ServerClient serverClient) {
+        this.clientList.add(serverClient);
+    }
+ 
+//    public void SendBroadcast(String message) throws IOException {
+//        String broadcostMessage = (" " + message);
+//        for (ServerClient client : clientList) {
+//            client.SendMessage(broadcostMessage);
+//        }
 //    }
 
    
@@ -81,10 +80,10 @@ public class Server extends Thread{
             try {
                 Socket clientSocket = this.serverSocket.accept();
                 ServerClient newClient = new ServerClient(clientSocket, this);
-                //this.AddClient(newClient);
+                this.AddClient(newClient);
                 newClient.Listen();
-                //System.out.println("ip: " + clientSocket.getInetAddress().toString());
-                //System.out.println("port: " + clientSocket.getPort());
+                System.out.println("--ip: " + clientSocket.getInetAddress().toString());
+                System.out.println("--port: " + clientSocket.getPort());
             } catch (IOException ex) {
                 Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
             }

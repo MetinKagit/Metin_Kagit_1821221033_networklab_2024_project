@@ -5,9 +5,11 @@
 package com.mycompany.projectmanagementclient;
 
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.json.JSONObject;
 
 /**
  *
@@ -160,11 +162,27 @@ public class Frm_StartPage extends javax.swing.JFrame {
 
             this.client = new Client(serverAddress, Integer.parseInt(serverPort), username, password);
             client.Listen();
-
+            
             if (client.isListening) {
-                String message = " " + "001," + username + "," + password;
-                this.client.SendMessage(message.getBytes());
-                openHomePageForm(); // Call the method to open the start page form upon successful connection
+                JSONObject registerJsonObject = new JSONObject();
+            registerJsonObject.put("serverAddress", serverAddress);
+            registerJsonObject.put("serverPort", serverPort);
+            registerJsonObject.put("code", "001");
+            registerJsonObject.put("username", username);
+            registerJsonObject.put("password", password);
+            registerJsonObject.put("processDone", "false");
+
+                this.client.ClientLogin(registerJsonObject);
+                if (this.client.process) {
+                    System.out.println("log88");
+                    openHomePageForm(); // Call the method to open the start page form upon successful connection
+                    this.client.process = false;
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Wrong username or password!", "Information", JOptionPane.ERROR_MESSAGE);
+
+                }
+
             } else {
                 // Display a specific error message for connection failure
                 JOptionPane.showMessageDialog(this, "Connection failed. Please check the server address, port number, and network connectivity.", "Connection Failed", JOptionPane.ERROR_MESSAGE);

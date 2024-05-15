@@ -24,19 +24,19 @@ public class ProjectManagementClient {
             OutputStream clientOutput = clientSocket.getOutputStream();
             InputStream clientInput = clientSocket.getInputStream();
             sleep(5000);
-            //byte bytes[] = " Hello, ".getBytes();
+            byte bytes[] = " Hello, ".getBytes();
             //clientOutput.write(bytes);
 
             while (!clientSocket.isClosed()) {
-                int byteSize = clientInput.read();
-               byte bytes[] = new byte[byteSize];
-                clientInput.read(bytes);
-
-                System.out.println("------ ------ ------");
-
-                System.out.println(new String(bytes, StandardCharsets.UTF_8));
-
-                System.out.println("------ ------ ------");
+//                int byteSize = clientInput.read();
+//                bytes = new byte[byteSize];
+//                clientInput.read(bytes);
+//
+//                System.out.println("------ ------ ------");
+//
+//                System.out.println(new String(bytes, StandardCharsets.UTF_8));
+//
+//                System.out.println("------ ------ ------");
             }
 
 //            sleep(5000);

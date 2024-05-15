@@ -4,11 +4,14 @@
  */
 package projectmanagementserver;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import org.json.JSONObject;
 
 /**
  *
@@ -16,6 +19,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class ServerClient extends Thread {
 
+    BufferedReader reader;
+    PrintWriter writer;
     Socket socket;
     Server server;
     OutputStream output;
@@ -29,11 +34,13 @@ public class ServerClient extends Thread {
         this.server = server;
         this.output = socket.getOutputStream();
         this.input = socket.getInputStream();
+        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.writer = new PrintWriter(this.output, true);
         this.isListening = false;
         System.out.println(this.socket.getInetAddress().toString() + ":" + this.socket.getPort() + "-> Connected.");
     }
 
-    public void Listen() {
+    public void Listen() throws IOException {
         this.isListening = true;
         this.start();
     }
@@ -44,46 +51,60 @@ public class ServerClient extends Thread {
             this.input.close();
             this.output.close();
             this.socket.close();
+            this.writer.close();
+            this.reader.close();
             //this.server.RemoveClient(this);
         } catch (IOException ex) {
             System.out.println(this.socket.getInetAddress().toString() + ":" + this.socket.getPort() + "-> Stopped.");
         }
     }
 
-    public void SendMessage(byte[] messageBytes) throws IOException {
+    public void SendMessage(JSONObject jsonObject) throws IOException {
+        if (this.writer == null) {
+            throw new IOException("PrintWriter is not initialized");
+        }
+        String jsonString = jsonObject.toString();
+        //this.writer = new PrintWriter(this.output, true);
+        this.writer.println(jsonString);
+//        this.writer.write(message);
+//        this.writer.flush(); // Flush the output stream to send data immediately
+    }
 
-        this.output.write(messageBytes);
+    public void RegisterProcess(JSONObject jsonObject) throws IOException {
+
+        ServerClient serverClient = new ServerClient(this.socket, this.server);
+        ClientDAO.insertUserIntoDatabase(jsonObject, serverClient);
+    }
+
+    public void LoginProcess(JSONObject jsonObject) throws IOException {
+
+        ServerClient serverClient = new ServerClient(this.socket, this.server);
+        ClientDAO.authenticateUser(jsonObject, serverClient);
     }
 
     @Override
     public void run() {
         try {
             while (this.isListening) {
-                int byteSize = this.input.read();
-                byte bytes[] = new byte[byteSize];
-                this.input.read(bytes);
+                this.reader = new BufferedReader(new InputStreamReader(this.input));
+                String jsonString = reader.readLine();
+                if (jsonString != null) {
+                    System.out.println("Received JSON string from client: " + jsonString);
 
-                System.out.println("------ ------ ------");
-                System.out.println(this.socket.getInetAddress().toString() + ":" + this.socket.getPort() + "-> Message reacted.");
-                String message = (new String(bytes, StandardCharsets.UTF_8));
-                System.out.println("Message is:" + message);
-                System.out.println("------ ------ ------");
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    String code = jsonObject.getString("code");
 
-                String[] parts = message.split(",");
-                String code = parts[0];
+                    System.out.println("code : " + code);
+                    if (code.equals("000")) {
+                        System.out.println("Log 2");
+                        RegisterProcess(jsonObject);
 
-                if (code.equals("000")) {
-                    System.out.println("Log 2");
-                    String username = parts[1];
-                    String password = parts[2];
-                    if (DBLayer.insertUserIntoDatabase(username, password)) {
-                      ServerClient ser = new ServerClient(this.socket, this.server);
-                      String a = (" " + "true");
-                      ser.SendMessage(a.getBytes());
+                    } else if (code.equals("001")) {
+                        System.out.println("Log 22");
+                        LoginProcess(jsonObject);
                     }
-                } else if (code.equals("001")) {
-
                 }
+
             }
         } catch (IOException ex) {
             this.Stop();

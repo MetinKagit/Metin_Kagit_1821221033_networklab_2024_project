@@ -5,8 +5,11 @@
 package com.mycompany.projectmanagementclient;
 
 import java.io.IOException;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
+import org.json.JSONObject;
 
 /**
  *
@@ -41,6 +44,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_registerServerAddress = new javax.swing.JTextField();
+        btn_registerCancel = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,7 +58,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
             }
         });
 
-        btn_register.setText("Register");
+        btn_register.setText("Create User");
         btn_register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_registerActionPerformed(evt);
@@ -74,6 +78,13 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
             }
         });
 
+        btn_registerCancel.setText("Cancel");
+        btn_registerCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_registerCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,16 +101,18 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(txt_registerPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(btn_register, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txt_registerServerPort)
-                            .addComponent(txt_registerServerAddress))))
+                            .addComponent(txt_registerServerAddress)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn_register, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                            .addComponent(btn_registerCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(95, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -125,7 +138,9 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
                     .addComponent(txt_registerPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
                 .addComponent(btn_register)
-                .addGap(70, 70, 70))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_registerCancel)
+                .addGap(35, 35, 35))
         );
 
         pack();
@@ -145,22 +160,45 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
 
             this.client = new Client(serverAddress, Integer.parseInt(serverPort), username, password);
             this.client.Listen();
-            String message = " " + "000," + username + "," + password;
             
-            //byte[] messageBytes = message.getBytes("UTF-8");
-            this.client.SendMessage(message.getBytes());
+            JSONObject registerJsonObject = new JSONObject();
+            registerJsonObject.put("serverAddress", serverAddress);
+            registerJsonObject.put("serverPort", serverPort);
+            registerJsonObject.put("code", "000");
+            registerJsonObject.put("username", username);
+            registerJsonObject.put("password", password);
+            registerJsonObject.put("processDone", "false");
+            // Send JSON object to server and get response
+            this.client.ClientRegisteration(registerJsonObject);
+            System.out.println("Server response: " + this.client.process);
             
-            dispose();
+            if (this.client.process) {
+                System.out.println("log8");
+                JOptionPane.showMessageDialog(null, "Registeration process complete successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+                this.client.process = false;
+                this.client.Stop();
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Something went wrong!", "Information", JOptionPane.INFORMATION_MESSAGE);
+                this.client.process = false;
+                this.client.Stop();
+                dispose();
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(Frm_RegisterPage.class.getName()).log(Level.SEVERE, null, ex);
             dispose();
         }
-        
+
     }//GEN-LAST:event_btn_registerActionPerformed
 
     private void txt_registerServerAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_registerServerAddressActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_registerServerAddressActionPerformed
+
+    private void btn_registerCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registerCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_btn_registerCancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,6 +237,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btn_register;
+    private javax.swing.JToggleButton btn_registerCancel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
