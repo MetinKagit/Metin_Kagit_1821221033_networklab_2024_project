@@ -14,11 +14,13 @@ import org.json.JSONObject;
 /**
  *
  * @author metinkagit
+ * 1821221033
  */
 public class Frm_HomePage extends javax.swing.JFrame {
 
     /**
      * Creates new form Frm_HomePage
+     *
      */
     Client client;
     Frm_StartPage startPage;
@@ -374,8 +376,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
             createProjectJsonObject.put("isManager", isManager);
             createProjectJsonObject.put("processDone", "false");
             this.client.CreateProject(createProjectJsonObject);
-            if (this.client.process) {
-                System.out.println("log88");
+            if (this.client.process) {             
                 JOptionPane.showMessageDialog(null, "Project created successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
                 this.client.process = false;
                 txt_createProjectTitle.setText("");

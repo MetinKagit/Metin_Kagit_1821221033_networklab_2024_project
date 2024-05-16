@@ -22,6 +22,7 @@ import static projectmanagementserver.ProjectDAO.connectionUrl;
 /**
  *
  * @author metinkagit
+ * 1821221033
  */
 public class MessageDAO {
     static String connectionUrl = "jdbc:mysql://network-db.mysql.database.azure.com:3306";

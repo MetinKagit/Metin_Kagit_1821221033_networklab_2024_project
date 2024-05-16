@@ -14,6 +14,7 @@ import org.json.JSONObject;
 /**
  *
  * @author metinkagit
+ * 1821221033
  */
 public class Frm_StartPage extends javax.swing.JFrame {
 
@@ -188,7 +189,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
 
             } else {
                 // Display a specific error message for connection failure
-                JOptionPane.showMessageDialog(this, "Connection failed. Please check the server address, port number, and network connectivity.", "Connection Failed", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Connection failed. Please check the entered information.", "Connection Failed", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException ex) {
             Logger.getLogger(Frm_StartPage.class.getName()).log(Level.SEVERE, null, ex);

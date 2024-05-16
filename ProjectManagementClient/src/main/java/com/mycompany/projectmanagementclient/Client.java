@@ -22,6 +22,7 @@ import org.json.JSONObject;
 /**
  *
  * @author metinkagit
+ * 1821221033
  */
 public class Client extends Thread {
 
@@ -47,8 +48,6 @@ public class Client extends Thread {
         this.password = password;
         this.isListening = false;
         this.process = false;
-
-        //Frm_Server.lst_clients_model.addElement(this.socket.getInetAddress().toString() + ":" + this.socket.getPort());
     }
 
     public void Listen() {
@@ -168,6 +167,7 @@ public class Client extends Thread {
                         String id = projectDetails[0];
                         String title = projectDetails[1];
                         String key = projectDetails[2];
+                        //Add 'tems to jList
                         Frm_HomePage.lst_userProjects_model.addElement(id + "  |  " + title + "  |  " + key);
                     }
                     System.out.println("log11");
@@ -315,6 +315,7 @@ public class Client extends Thread {
                         if (responseJsonObject.has("memberArray")) {
                             memberArray = responseJsonObject.getJSONArray("memberArray");
                         }
+                        // clear the list to avoid duplication
                         Frm_ProjectPage.lst_teamMembers_model.clear();
                         for (int i = 0; i < memberArray.length(); i++) {
                             String member = memberArray.getString(i);
@@ -364,7 +365,7 @@ public class Client extends Thread {
 
                     String code = responseJsonObject.getString("code");
                     String response = responseJsonObject.getString("processDone");
-                    System.out.println("Code: " + code + "processDone: " + response);
+                    System.out.println("Code: " + code + " processDone: " + response);
 
                     if (code.equals("006") && response.equals("true")) {
                         JSONArray messageArray = new JSONArray();
