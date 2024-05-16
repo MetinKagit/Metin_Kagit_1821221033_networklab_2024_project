@@ -13,6 +13,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import static projectmanagementserver.ClientDAO.DBPassword;
@@ -28,7 +30,7 @@ public class ProjectDAO {
     static String connectionUrl = "jdbc:mysql://network-db.mysql.database.azure.com:3306";
     static String DBuser = "networkRoot";
     static String DBPassword = "13579_Metin";
-    
+
     public static void CreateProject(JSONObject jsonObject, ServerClient serverClient) throws IOException {
         String managerId = jsonObject.getString("manager_id");
         String title = jsonObject.getString("title");
@@ -47,28 +49,27 @@ public class ProjectDAO {
 
             // SQL insert statement
             String sql = "INSERT INTO networkdb.projects (manager_id, title, explanation, project_key) VALUES (?, ?, ?, ?)";
-            
+
             // Create a prepared statement
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, Integer.parseInt(managerId));
             preparedStatement.setString(2, title);
             preparedStatement.setString(3, explanation);
             preparedStatement.setString(4, projectKey);
-            
-            
+
             // Execute the insert statement
             int rowsAffected = preparedStatement.executeUpdate();
             if (rowsAffected > 0) {
-                
+
                 System.out.println("Project inserted successfully.");
                 jsonObject.put("processDone", "true");
                 jsonObject.put("projectKey", projectKey);
 
                 int projectId = getProjectIdByTitle(connection, title);
                 System.out.println("-----pid: " + projectId);
-                insertProjectMember(projectId,Integer.parseInt(managerId),isManager );
+                insertProjectMember(projectId, Integer.parseInt(managerId), isManager);
                 jsonObject.put("projectId", String.valueOf(projectId));
-                
+
                 serverClient.SendMessage(jsonObject);
             } else {
                 System.out.println("Failed to insert project.");
@@ -77,11 +78,9 @@ public class ProjectDAO {
             e.printStackTrace();
         }
     }
-    
-     
 
     public static void insertProjectMember(int projectId, int managerId, boolean isManager) {
-        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)){
+        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
             String memberSql = "INSERT INTO networkdb.project_members (project_id, member_id, is_manager) VALUES (?, ?, ?)";
             PreparedStatement memberPreparedStatement = connection.prepareStatement(memberSql);
             memberPreparedStatement.setInt(1, projectId);
@@ -97,6 +96,7 @@ public class ProjectDAO {
             e.printStackTrace();
         }
     }
+
     public static boolean isProjectTitleExists(Connection connection, String title) throws SQLException {
         String sql = "SELECT COUNT(*) AS count FROM networkdb.projects WHERE title = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -135,8 +135,8 @@ public class ProjectDAO {
         }
         return sb.toString();
     }
-    
-     public static Project getProjectByKey(String key) {
+
+    public static Project getProjectByKey(String key) {
         try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
             // SQL query to retrieve project by ID
             String sql = "SELECT * FROM networkdb.projects WHERE project_key = ?";
@@ -156,5 +156,37 @@ public class ProjectDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String[] getTeamMembersByProjectId(int projectId, int userIdToExclude) throws SQLException {
+
+        List<String> resultList = new ArrayList<>();
+
+        // SQL query with user exclusion
+        String sql = "SELECT networkdb.users.id, networkdb.users.name FROM networkdb.users " +
+                     "JOIN networkdb.project_members ON networkdb.project_members.member_id = networkdb.users.id " +
+                     "WHERE networkdb.project_members.project_id = ? AND networkdb.users.id != ?";
+
+        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, projectId);
+            preparedStatement.setInt(2, userIdToExclude);
+
+            // Execute the query
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                // Process the result set
+                while (resultSet.next()) {
+                    int userId = resultSet.getInt("id");
+                    String userName = resultSet.getString("name");
+                    resultList.add(userId + ", " + userName);
+                }
+            }
+        }
+
+        // Convert the list to an array
+        String[] resultArray = new String[resultList.size()];
+        resultArray = resultList.toArray(resultArray);
+
+        return resultArray;
     }
 }

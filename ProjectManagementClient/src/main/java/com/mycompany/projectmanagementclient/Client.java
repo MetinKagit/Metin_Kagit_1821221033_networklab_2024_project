@@ -252,7 +252,7 @@ public class Client extends Thread {
         // Send JSON string to server
         this.writer = new PrintWriter(this.output, true);
         writer.println(jsonString);
-        
+
         // Create a new thread to read the response from the server
         Thread createProjectThread = new Thread(() -> {
             try {
@@ -292,6 +292,70 @@ public class Client extends Thread {
             e.printStackTrace();
         }
     }
+
+    public void OpenProject(JSONObject jsonObject) {
+        String jsonString = jsonObject.toString();
+
+        // Send JSON string to server
+        this.writer = new PrintWriter(this.output, true);
+        writer.println(jsonString);
+
+        Thread projectResponseThread = new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    String message = this.reader.readLine();
+                    JSONObject responseJsonObject = new JSONObject(message);
+
+                    String code = responseJsonObject.getString("code");
+                    String response = responseJsonObject.getString("processDone");
+                    System.out.println("Code: " + code + "processDone: " + response);
+
+                    if (code.equals("004") && response.equals("true")) {
+                        JSONArray memberArray = new JSONArray();
+                        if (responseJsonObject.has("memberArray")) {
+                            memberArray = responseJsonObject.getJSONArray("memberArray");
+                        }
+                        for (int i = 0; i < memberArray.length(); i++) {
+                            String member = memberArray.getString(i);
+                            String[] memberDetails = member.split(", ");
+                            String id = memberDetails[0];
+                            String name = memberDetails[1];    
+                            System.out.println( id + "  |   " + name);
+                            Frm_ProjectPage.lst_teamMembers_model.addElement(id + "  |  " + name);
+                        }
+                        this.process = true;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    } else if (code.equals("004") && response.equals("false")) {
+                        this.process = false;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No data available to read.");             
+            }
+        });
+
+        projectResponseThread.start();
+
+        try {
+            projectResponseThread.join(); // Wait for the responseThread to finish
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+    
+     public void SendMessage(JSONObject jsonObject){
+         String jsonString = jsonObject.toString();
+
+        // Send JSON string to server
+        this.writer = new PrintWriter(this.output, true);
+        writer.println(jsonString); 
+     }
+     
+    
 
     @Override
     public void run() {

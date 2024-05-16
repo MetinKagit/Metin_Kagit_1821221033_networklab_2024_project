@@ -58,6 +58,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
             }
         });
 
+        btn_login.setBackground(new java.awt.Color(204, 218, 237));
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -65,6 +66,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
             }
         });
 
+        btn_register.setBackground(new java.awt.Color(204, 218, 237));
         btn_register.setText("Register");
         btn_register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,6 +148,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed

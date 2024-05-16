@@ -69,9 +69,11 @@ public class Frm_HomePage extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         jLabel6 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        txt_openProjectID = new javax.swing.JTextField();
+        btn_refreshMessageBox = new javax.swing.JButton();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -108,6 +110,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
 
         jLabel7.setText("Key");
 
+        btn_joinProject.setBackground(new java.awt.Color(204, 218, 237));
         btn_joinProject.setText("Join Project");
         btn_joinProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,6 +118,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
             }
         });
 
+        btn_createProject.setBackground(new java.awt.Color(204, 218, 237));
         btn_createProject.setText("Create Project");
         btn_createProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,6 +126,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
             }
         });
 
+        btn_openProject.setBackground(new java.awt.Color(204, 218, 237));
         btn_openProject.setText("Open Project");
         btn_openProject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,38 +142,16 @@ public class Frm_HomePage extends javax.swing.JFrame {
 
         jLabel3.setText("Key:");
 
+        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel4.setText("Join a project:");
 
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel5.setText("Create a project:");
-
-        jLabel6.setText("Open a project:");
-
-        jLabel8.setText("Project ID:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel7))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(125, 125, 125)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -182,22 +165,40 @@ public class Frm_HomePage extends javax.swing.JFrame {
                         .addComponent(jLabel2))
                     .addComponent(btn_createProject))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btn_openProject, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btn_joinProject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_joinProjectKey, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jLabel6)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txt_openProjectID)))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn_joinProject, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txt_joinProjectKey, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(125, 125, 125))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel7)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btn_openProject, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                                .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,7 +220,9 @@ public class Frm_HomePage extends javax.swing.JFrame {
                             .addComponent(jLabel7))
                         .addGap(3, 3, 3)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(52, 52, 52)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_openProject)
+                .addGap(50, 50, 50)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
@@ -228,13 +231,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
                             .addComponent(txt_joinProjectKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_joinProject)
-                        .addGap(42, 42, 42)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txt_openProjectID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btn_joinProject))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -246,13 +243,45 @@ public class Frm_HomePage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_createProject)
-                    .addComponent(btn_openProject))
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addComponent(btn_createProject)
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Home", jPanel2);
+
+        jScrollPane3.setViewportView(jList1);
+
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
+        jLabel6.setText("Message Box:");
+
+        btn_refreshMessageBox.setText("Refresh Message Box");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_refreshMessageBox)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel6)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_refreshMessageBox)
+                .addContainerGap(371, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Message Box", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -270,6 +299,31 @@ public class Frm_HomePage extends javax.swing.JFrame {
 
     private void btn_openProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openProjectActionPerformed
         // TODO add your handling code here:
+        String value = lst_userProjects.getSelectedValue();
+        String[] valueDetail = value.split("  |  ");
+        int projectId = Integer.parseInt(valueDetail[0]);
+        System.out.println(valueDetail[0]);
+        String projectName = valueDetail[1];
+
+        if (this.client.isListening) {
+            JSONObject createProjectJsonObject = new JSONObject();
+            createProjectJsonObject.put("code", "004");
+            createProjectJsonObject.put("project_id", projectId);
+            createProjectJsonObject.put("user_id", this.client.getId());
+            createProjectJsonObject.put("processDone", "false");
+            this.client.OpenProject(createProjectJsonObject);
+            if (this.client.process) {
+                Frm_ProjectPage projectPage = new Frm_ProjectPage(this.client,projectName.toString());
+                projectPage.show();
+                this.client.process = false;
+            } else {
+                JOptionPane.showMessageDialog(null, "Something went wrong!.", "Information", JOptionPane.ERROR_MESSAGE);
+
+            }
+        } else {
+            System.out.println("Client is not listening!");
+        }
+
     }//GEN-LAST:event_btn_openProjectActionPerformed
 
     private void btn_joinProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_joinProjectActionPerformed
@@ -288,7 +342,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Join the project successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
                 this.client.process = false;
                 txt_joinProjectKey.setText("");
-               
+
             } else {
                 JOptionPane.showMessageDialog(null, "Could not be joining the project, Please check the project key and try again.", "Information", JOptionPane.ERROR_MESSAGE);
 
@@ -320,12 +374,10 @@ public class Frm_HomePage extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Project could not be created, Please change the title and try again.", "Information", JOptionPane.ERROR_MESSAGE);
 
-            }
-        } else {
-            System.out.println("Client is not listening!");
-        }
-
     }//GEN-LAST:event_btn_createProjectActionPerformed
+
+        }  
+    }                                                 
 
     /**
      * @param args the command line arguments
@@ -367,6 +419,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
     private javax.swing.JButton btn_createProject;
     private javax.swing.JButton btn_joinProject;
     private javax.swing.JButton btn_openProject;
+    private javax.swing.JButton btn_refreshMessageBox;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JFrame jFrame1;
@@ -381,15 +434,16 @@ public class Frm_HomePage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JList<String> lst_userProjects;
     private javax.swing.JTextField txt_createProjectTitle;
     private javax.swing.JTextField txt_joinProjectKey;
-    private javax.swing.JTextField txt_openProjectID;
     private javax.swing.JTextPane txta_projectExplanation;
     // End of variables declaration//GEN-END:variables
 }

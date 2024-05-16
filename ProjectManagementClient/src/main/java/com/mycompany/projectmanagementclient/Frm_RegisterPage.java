@@ -46,7 +46,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
         txt_registerServerAddress = new javax.swing.JTextField();
         btn_registerCancel = new javax.swing.JToggleButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Username:");
 
@@ -58,6 +58,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
             }
         });
 
+        btn_register.setBackground(new java.awt.Color(204, 218, 237));
         btn_register.setText("Create User");
         btn_register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,6 +79,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
             }
         });
 
+        btn_registerCancel.setBackground(new java.awt.Color(255, 204, 204));
         btn_registerCancel.setText("Cancel");
         btn_registerCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,6 +146,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt_registerUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_registerUsernameActionPerformed

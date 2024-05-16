@@ -11,6 +11,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -87,25 +91,66 @@ public class ServerClient extends Thread {
         ServerClient serverClient = new ServerClient(this.socket, this.server);
         ProjectDAO.CreateProject(jsonObject, serverClient);
     }
-    
+
     public void JoinProjectProcess(JSONObject jsonObject) throws IOException {
 
         ServerClient serverClient = new ServerClient(this.socket, this.server);
         String memberId = jsonObject.getString("member_id");
         String project_key = jsonObject.getString("key");
         boolean isManager = jsonObject.getBoolean("isManager");
-        
-         Project project = ProjectDAO.getProjectByKey(project_key);
-         
-         ProjectDAO.insertProjectMember(project.getProjectId(),Integer.parseInt(memberId) , isManager);
-         
-         jsonObject.put("projectId", project.getProjectId());
-         jsonObject.put("projectKey", "-");
-         jsonObject.put("title", project.getTitle());
-         jsonObject.put("processDone", "true");
-         
-         serverClient.SendMessage(jsonObject);
-         
+
+        Project project = ProjectDAO.getProjectByKey(project_key);
+
+        ProjectDAO.insertProjectMember(project.getProjectId(), Integer.parseInt(memberId), isManager);
+
+        jsonObject.put("projectId", project.getProjectId());
+        jsonObject.put("projectKey", "-");
+        jsonObject.put("title", project.getTitle());
+        jsonObject.put("processDone", "true");
+
+        serverClient.SendMessage(jsonObject);
+
+    }
+
+    public void OpenProjectProcess(JSONObject jsonObject) throws IOException {
+
+        try {
+            ServerClient serverClient = new ServerClient(this.socket, this.server);
+            int projectId = jsonObject.getInt("project_id");
+            int usertId = jsonObject.getInt("user_id");
+
+            String[] teamMembers = ProjectDAO.getTeamMembersByProjectId(projectId, usertId);
+            System.out.println("Team Members:");
+            for (String member : teamMembers) {
+                System.out.println(member);
+            }
+
+            JSONArray membersJsonArray = new JSONArray();
+            System.out.println("Team Members:");
+            for (String member : teamMembers) {
+                membersJsonArray.put(member);
+                System.out.println(member);
+            }
+            jsonObject.put("memberArray", membersJsonArray);
+            jsonObject.put("processDone", "true");
+            serverClient.SendMessage(jsonObject);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void SendMessageProcess(JSONObject jsonObject) throws IOException {
+
+        try {
+            ServerClient serverClient = new ServerClient(this.socket, this.server);
+            int receiverId = jsonObject.getInt("receiver_id");
+            int sendertId = jsonObject.getInt("sender_id");
+            String message = jsonObject.getString("message");
+            MessageDAO.sendMessage(receiverId, sendertId, message);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     @Override
@@ -130,9 +175,15 @@ public class ServerClient extends Thread {
                     } else if (code.equals("002")) {
                         System.out.println("Log 23");
                         CreateProjectProcess(jsonObject);
-                    }else if (code.equals("003")) {
+                    } else if (code.equals("003")) {
                         System.out.println("Log 24");
                         JoinProjectProcess(jsonObject);
+                    } else if (code.equals("004")) {
+                        System.out.println("Log 25");
+                        OpenProjectProcess(jsonObject);
+                    } else if (code.equals("005")) {
+                        System.out.println("Log 25");
+                        SendMessageProcess(jsonObject);
                     }
                 }
 
