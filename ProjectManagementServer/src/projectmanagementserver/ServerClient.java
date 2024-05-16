@@ -87,6 +87,26 @@ public class ServerClient extends Thread {
         ServerClient serverClient = new ServerClient(this.socket, this.server);
         ProjectDAO.CreateProject(jsonObject, serverClient);
     }
+    
+    public void JoinProjectProcess(JSONObject jsonObject) throws IOException {
+
+        ServerClient serverClient = new ServerClient(this.socket, this.server);
+        String memberId = jsonObject.getString("member_id");
+        String project_key = jsonObject.getString("key");
+        boolean isManager = jsonObject.getBoolean("isManager");
+        
+         Project project = ProjectDAO.getProjectByKey(project_key);
+         
+         ProjectDAO.insertProjectMember(project.getProjectId(),Integer.parseInt(memberId) , isManager);
+         
+         jsonObject.put("projectId", project.getProjectId());
+         jsonObject.put("projectKey", "-");
+         jsonObject.put("title", project.getTitle());
+         jsonObject.put("processDone", "true");
+         
+         serverClient.SendMessage(jsonObject);
+         
+    }
 
     @Override
     public void run() {
@@ -110,6 +130,9 @@ public class ServerClient extends Thread {
                     } else if (code.equals("002")) {
                         System.out.println("Log 23");
                         CreateProjectProcess(jsonObject);
+                    }else if (code.equals("003")) {
+                        System.out.println("Log 24");
+                        JoinProjectProcess(jsonObject);
                     }
                 }
 

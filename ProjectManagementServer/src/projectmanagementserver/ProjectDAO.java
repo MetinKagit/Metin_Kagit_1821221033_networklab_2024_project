@@ -33,7 +33,7 @@ public class ProjectDAO {
         String managerId = jsonObject.getString("manager_id");
         String title = jsonObject.getString("title");
         String explanation = jsonObject.getString("explanation");
-        boolean isManager = true;
+        boolean isManager = jsonObject.getBoolean("isManager");
         try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
 
             if (isProjectTitleExists(connection, title)) {
@@ -66,7 +66,7 @@ public class ProjectDAO {
 
                 int projectId = getProjectIdByTitle(connection, title);
                 System.out.println("-----pid: " + projectId);
-                insertProjectMember(connection,projectId,Integer.parseInt(managerId),isManager );
+                insertProjectMember(projectId,Integer.parseInt(managerId),isManager );
                 jsonObject.put("projectId", String.valueOf(projectId));
                 
                 serverClient.SendMessage(jsonObject);
@@ -77,9 +77,11 @@ public class ProjectDAO {
             e.printStackTrace();
         }
     }
+    
+     
 
-    public static void insertProjectMember(Connection connection, int projectId, int managerId, boolean isManager) {
-        try {
+    public static void insertProjectMember(int projectId, int managerId, boolean isManager) {
+        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)){
             String memberSql = "INSERT INTO networkdb.project_members (project_id, member_id, is_manager) VALUES (?, ?, ?)";
             PreparedStatement memberPreparedStatement = connection.prepareStatement(memberSql);
             memberPreparedStatement.setInt(1, projectId);
@@ -132,5 +134,27 @@ public class ProjectDAO {
             sb.append(chars.charAt(index));
         }
         return sb.toString();
+    }
+    
+     public static Project getProjectByKey(String key) {
+        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
+            // SQL query to retrieve project by ID
+            String sql = "SELECT * FROM networkdb.projects WHERE project_key = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, key);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Project project = new Project();
+                project.setProjectId(resultSet.getInt("project_id"));
+                project.setTitle(resultSet.getString("title"));
+                project.setExplanation(resultSet.getString("explanation"));
+                project.setManagerId(resultSet.getInt("manager_id"));
+                project.setProjectKey(resultSet.getString("project_key"));
+                return project;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

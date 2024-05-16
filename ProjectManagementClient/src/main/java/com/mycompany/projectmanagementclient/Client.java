@@ -151,7 +151,7 @@ public class Client extends Thread {
                     String response = responseJsonObject.getString("processDone");
                     String userId = responseJsonObject.getString("userId");
                     this.clientId = Integer.parseInt(userId);
-                            
+
                     JSONArray projectArray = new JSONArray();
                     if (responseJsonObject.has("projectArray")) {
                         projectArray = responseJsonObject.getJSONArray("projectArray");
@@ -199,14 +199,14 @@ public class Client extends Thread {
         }
     }
 
-    public void CreateProject(JSONObject jsonObject){
+    public void CreateProject(JSONObject jsonObject) {
         String jsonString = jsonObject.toString();
 
         // Send JSON string to server
         this.writer = new PrintWriter(this.output, true);
         writer.println(jsonString);
-        
-         // Create a new thread to read the response from the server
+
+        // Create a new thread to read the response from the server
         Thread createProjectThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
@@ -216,9 +216,9 @@ public class Client extends Thread {
                     String code = responseJsonObject.getString("code");
                     String response = responseJsonObject.getString("processDone");
                     String projectId = responseJsonObject.getString("projectId");
-                    String title =responseJsonObject.getString("title");
-                    String key  =responseJsonObject.getString("projectKey");
-                    System.out.println("Code: " + code + "processDone: " + response);
+                    String title = responseJsonObject.getString("title");
+                    String key = responseJsonObject.getString("projectKey");
+                    System.out.println("Code: " + code + " processDone: " + response + " projectId: " + projectId);
 
                     if (code.equals("002") && response.equals("true")) {
                         Frm_HomePage.lst_userProjects_model.addElement(projectId + "  |  " + title + "  |  " + key);
@@ -245,6 +245,54 @@ public class Client extends Thread {
             e.printStackTrace();
         }
     }
+
+    public void JoinProject(JSONObject jsonObject) {
+        String jsonString = jsonObject.toString();
+
+        // Send JSON string to server
+        this.writer = new PrintWriter(this.output, true);
+        writer.println(jsonString);
+        
+        // Create a new thread to read the response from the server
+        Thread createProjectThread = new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    String message = this.reader.readLine();
+                    JSONObject responseJsonObject = new JSONObject(message);
+
+                    String code = responseJsonObject.getString("code");
+                    String response = responseJsonObject.getString("processDone");
+                    int projectId = responseJsonObject.getInt("projectId");
+                    String title = responseJsonObject.getString("title");
+                    String key = responseJsonObject.getString("projectKey");
+                    System.out.println("Code: " + code + " processDone: " + response + " projectId: " + projectId);
+
+                    if (code.equals("003") && response.equals("true")) {
+                        Frm_HomePage.lst_userProjects_model.addElement(projectId + "  |  " + title + "  |  " + key);
+                        this.process = true;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    } else if (code.equals("003") && response.equals("false")) {
+                        this.process = false;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No data available to read.");
+                // Handle the case where no data is available
+            }
+        });
+
+        createProjectThread.start();
+
+        try {
+            createProjectThread.join(); // Wait for the responseThread to finish
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
         //try {

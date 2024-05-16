@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
 /**
@@ -27,14 +28,13 @@ public class Frm_HomePage extends javax.swing.JFrame {
     public Frm_HomePage(Client client) {
         initComponents();
         //lbl_name.setText(currentClient.getName());
-         this.client = client;
+        this.client = client;
         lst_userProjects.setModel(lst_userProjects_model);
     }
 
     private Frm_HomePage() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -273,30 +273,63 @@ public class Frm_HomePage extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_openProjectActionPerformed
 
     private void btn_joinProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_joinProjectActionPerformed
-        // TODO add your handling code here:
+        String key = txt_joinProjectKey.getText();
+        boolean isManager = false;
+        if (this.client.isListening) {
+            JSONObject createProjectJsonObject = new JSONObject();
+            createProjectJsonObject.put("code", "003");
+            createProjectJsonObject.put("member_id", String.valueOf(this.client.clientId));
+            createProjectJsonObject.put("key", key);
+            createProjectJsonObject.put("isManager", isManager);
+            createProjectJsonObject.put("processDone", "false");
+            this.client.JoinProject(createProjectJsonObject);
+            if (this.client.process) {
+                System.out.println("log89");
+                JOptionPane.showMessageDialog(null, "Join the project successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+                this.client.process = false;
+                txt_joinProjectKey.setText("");
+               
+            } else {
+                JOptionPane.showMessageDialog(null, "Could not be joining the project, Please check the project key and try again.", "Information", JOptionPane.ERROR_MESSAGE);
+
+            }
+        } else {
+            System.out.println("Client is not listening!");
+        }
     }//GEN-LAST:event_btn_joinProjectActionPerformed
 
     private void btn_createProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_createProjectActionPerformed
         String title = txt_createProjectTitle.getText();
-        String explanation = txta_projectExplanation.getText(); 
-        if (this.client.isListening){
+        String explanation = txta_projectExplanation.getText();
+        boolean isManager = true;
+        if (this.client.isListening) {
             JSONObject createProjectJsonObject = new JSONObject();
             createProjectJsonObject.put("code", "002");
             createProjectJsonObject.put("manager_id", String.valueOf(this.client.clientId));
             createProjectJsonObject.put("title", title);
             createProjectJsonObject.put("explanation", explanation);
+            createProjectJsonObject.put("isManager", isManager);
             createProjectJsonObject.put("processDone", "false");
             this.client.CreateProject(createProjectJsonObject);
-            
-        }else{
+            if (this.client.process) {
+                System.out.println("log88");
+                JOptionPane.showMessageDialog(null, "Project created successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+                this.client.process = false;
+                txt_createProjectTitle.setText("");
+               txta_projectExplanation.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Project could not be created, Please change the title and try again.", "Information", JOptionPane.ERROR_MESSAGE);
+
+            }
+        } else {
             System.out.println("Client is not listening!");
         }
 
     }//GEN-LAST:event_btn_createProjectActionPerformed
 
     /**
-         * @param args the command line arguments
-         */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
