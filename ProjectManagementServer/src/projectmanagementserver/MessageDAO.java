@@ -52,4 +52,35 @@ public class MessageDAO {
         }
     }
         
+     public static String[] getMessagesByUserId(int userId) throws SQLException {
+     List<String> resultList = new ArrayList<>();
+
+        // SQL query
+        String sql = "SELECT networkdb.users.name, networkdb.messages.message FROM networkdb.users " +
+                     "JOIN networkdb.messages ON networkdb.messages.sender_id = networkdb.users.id " +
+                     "WHERE networkdb.messages.receiver_id = ?";
+
+        // Create a prepared statement
+        try (Connection connection = DriverManager.getConnection(connectionUrl, DBuser, DBPassword)) {
+            
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            // Execute the query
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                // Process the result set
+                while (resultSet.next()) {
+                    String userName = resultSet.getString("name");
+                    String message = resultSet.getString("message");
+                    resultList.add(userName + ", " + message);
+                }
+            }
+        }
+
+        // Convert the list to an array
+        String[] resultArray = new String[resultList.size()];
+        resultArray = resultList.toArray(resultArray);
+
+        return resultArray;
+    }
+     
 }

@@ -315,12 +315,13 @@ public class Client extends Thread {
                         if (responseJsonObject.has("memberArray")) {
                             memberArray = responseJsonObject.getJSONArray("memberArray");
                         }
+                        Frm_ProjectPage.lst_teamMembers_model.clear();
                         for (int i = 0; i < memberArray.length(); i++) {
                             String member = memberArray.getString(i);
                             String[] memberDetails = member.split(", ");
                             String id = memberDetails[0];
-                            String name = memberDetails[1];    
-                            System.out.println( id + "  |   " + name);
+                            String name = memberDetails[1];
+                            System.out.println(id + "  |   " + name);
                             Frm_ProjectPage.lst_teamMembers_model.addElement(id + "  |  " + name);
                         }
                         this.process = true;
@@ -333,7 +334,7 @@ public class Client extends Thread {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("No data available to read.");             
+                System.out.println("No data available to read.");
             }
         });
 
@@ -346,16 +347,69 @@ public class Client extends Thread {
         }
 
     }
-    
-     public void SendMessage(JSONObject jsonObject){
-         String jsonString = jsonObject.toString();
+
+    public void GetMessages(JSONObject jsonObject) {
+
+        String jsonString = jsonObject.toString();
 
         // Send JSON string to server
         this.writer = new PrintWriter(this.output, true);
-        writer.println(jsonString); 
-     }
-     
-    
+        writer.println(jsonString);
+
+        Thread getMessageResponseThread = new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    String message = this.reader.readLine();
+                    JSONObject responseJsonObject = new JSONObject(message);
+
+                    String code = responseJsonObject.getString("code");
+                    String response = responseJsonObject.getString("processDone");
+                    System.out.println("Code: " + code + "processDone: " + response);
+
+                    if (code.equals("006") && response.equals("true")) {
+                        JSONArray messageArray = new JSONArray();
+                        if (responseJsonObject.has("messageArray")) {
+                            messageArray = responseJsonObject.getJSONArray("messageArray");
+                        }
+                         Frm_HomePage.lst_messageBox_model.clear();
+                        for (int i = 0; i < messageArray.length(); i++) {
+                            String messageParts = messageArray.getString(i);
+                            String[] parts = messageParts.split(",", 2);
+                            String name = parts[0];
+                            String messageBody = parts.length > 1 ? parts[1] : "";
+                            
+                            Frm_HomePage.lst_messageBox_model.addElement(name + "  :  " + messageBody);
+                        }
+                        this.process = true;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    } else if (code.equals("006") && response.equals("false")) {
+                        this.process = false;
+                        Thread.currentThread().interrupt(); // Interrupt the thread after reading the data
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("No data available to read.");
+            }
+        });
+
+        getMessageResponseThread.start();
+
+        try {
+            getMessageResponseThread.join(); // Wait for the responseThread to finish
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void SendMessage(JSONObject jsonObject) {
+        String jsonString = jsonObject.toString();
+
+        // Send JSON string to server
+        this.writer = new PrintWriter(this.output, true);
+        writer.println(jsonString);
+    }
 
     @Override
     public void run() {

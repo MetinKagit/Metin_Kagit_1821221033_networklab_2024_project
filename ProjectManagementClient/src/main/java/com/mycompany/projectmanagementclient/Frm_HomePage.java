@@ -22,14 +22,17 @@ public class Frm_HomePage extends javax.swing.JFrame {
      */
     Client client;
     Frm_StartPage startPage;
+    Frm_ProjectPage projectPage;
 
     public static DefaultListModel lst_userProjects_model = new DefaultListModel();
+    public static DefaultListModel lst_messageBox_model = new DefaultListModel();
 
     public Frm_HomePage(Client client) {
         initComponents();
         //lbl_name.setText(currentClient.getName());
         this.client = client;
         lst_userProjects.setModel(lst_userProjects_model);
+        lst_messageBox.setModel(lst_messageBox_model);
     }
 
     private Frm_HomePage() {
@@ -71,7 +74,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lst_messageBox = new javax.swing.JList<>();
         jLabel6 = new javax.swing.JLabel();
         btn_refreshMessageBox = new javax.swing.JButton();
 
@@ -249,12 +252,17 @@ public class Frm_HomePage extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Home", jPanel2);
 
-        jScrollPane3.setViewportView(jList1);
+        jScrollPane3.setViewportView(lst_messageBox);
 
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel6.setText("Message Box:");
 
         btn_refreshMessageBox.setText("Refresh Message Box");
+        btn_refreshMessageBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_refreshMessageBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -275,10 +283,10 @@ public class Frm_HomePage extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_refreshMessageBox)
-                .addContainerGap(371, Short.MAX_VALUE))
+                .addContainerGap(253, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Message Box", jPanel1);
@@ -299,6 +307,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
 
     private void btn_openProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openProjectActionPerformed
         // TODO add your handling code here:
+       
         String value = lst_userProjects.getSelectedValue();
         String[] valueDetail = value.split("  |  ");
         int projectId = Integer.parseInt(valueDetail[0]);
@@ -313,7 +322,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
             createProjectJsonObject.put("processDone", "false");
             this.client.OpenProject(createProjectJsonObject);
             if (this.client.process) {
-                Frm_ProjectPage projectPage = new Frm_ProjectPage(this.client,projectName.toString());
+                Frm_ProjectPage projectPage = new Frm_ProjectPage(this.client, projectName.toString());
                 projectPage.show();
                 this.client.process = false;
             } else {
@@ -370,14 +379,33 @@ public class Frm_HomePage extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Project created successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
                 this.client.process = false;
                 txt_createProjectTitle.setText("");
-               txta_projectExplanation.setText("");
+                txta_projectExplanation.setText("");
             } else {
                 JOptionPane.showMessageDialog(null, "Project could not be created, Please change the title and try again.", "Information", JOptionPane.ERROR_MESSAGE);
 
     }//GEN-LAST:event_btn_createProjectActionPerformed
+        }
+    }
 
-        }  
-    }                                                 
+
+    private void btn_refreshMessageBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshMessageBoxActionPerformed
+        int userId = this.client.clientId;
+        if (this.client.isListening) {
+            JSONObject getMessagesJsonObject = new JSONObject();
+            getMessagesJsonObject.put("code", "006");
+            getMessagesJsonObject.put("user_id", userId);
+            getMessagesJsonObject.put("processDone", "false");
+            this.client.GetMessages(getMessagesJsonObject);
+            if (this.client.process) {
+                this.client.process = false;
+            } else {
+                JOptionPane.showMessageDialog(null, "Something went wrong!.", "Information", JOptionPane.ERROR_MESSAGE);
+
+            }
+        } else {
+            System.out.println("Client is not listening!");
+        }
+    }//GEN-LAST:event_btn_refreshMessageBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -434,13 +462,13 @@ public class Frm_HomePage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JList<String> lst_messageBox;
     private javax.swing.JList<String> lst_userProjects;
     private javax.swing.JTextField txt_createProjectTitle;
     private javax.swing.JTextField txt_joinProjectKey;

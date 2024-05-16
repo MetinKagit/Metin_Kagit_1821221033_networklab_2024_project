@@ -153,6 +153,36 @@ public class ServerClient extends Thread {
 
     }
 
+    public void GetMessagesByUserId(JSONObject jsonObject) throws IOException {
+
+        try {
+            ServerClient serverClient = new ServerClient(this.socket, this.server);
+            int userId = jsonObject.getInt("user_id");
+
+            String[] messages = MessageDAO.getMessagesByUserId(userId);
+            System.out.println("Message Query:");
+//            for (String row : messages) {
+//                System.out.println(row);
+//            }
+
+            JSONArray messagesJsonArray = new JSONArray();
+
+            for (String message : messages) {
+                messagesJsonArray.put(message);
+                System.out.println(message);
+            }
+
+            jsonObject.put("messageArray", messagesJsonArray);
+            jsonObject.put("processDone", "true");
+            serverClient.SendMessage(jsonObject);
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ServerClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     @Override
     public void run() {
         try {
@@ -184,6 +214,9 @@ public class ServerClient extends Thread {
                     } else if (code.equals("005")) {
                         System.out.println("Log 25");
                         SendMessageProcess(jsonObject);
+                    } else if (code.equals("006")) {
+                        System.out.println("Log 25");
+                        GetMessagesByUserId(jsonObject);
                     }
                 }
 
