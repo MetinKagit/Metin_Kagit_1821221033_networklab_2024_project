@@ -19,15 +19,15 @@ import java.util.logging.Logger;
 public class ProjectManagementClient {
 
     public static void main(String[] args) {
-        try {
-            Socket clientSocket = new Socket("localhost", 5000);
-            OutputStream clientOutput = clientSocket.getOutputStream();
-            InputStream clientInput = clientSocket.getInputStream();
-            sleep(5000);
-            byte bytes[] = " Hello, ".getBytes();
+        //try {
+//            Socket clientSocket = new Socket("localhost", 5000);
+//            OutputStream clientOutput = clientSocket.getOutputStream();
+//            InputStream clientInput = clientSocket.getInputStream();
+//            sleep(5000);
+           // byte bytes[] = " Hello, ".getBytes();
             //clientOutput.write(bytes);
 
-            while (!clientSocket.isClosed()) {
+          //  while (!clientSocket.isClosed()) {
 //                int byteSize = clientInput.read();
 //                bytes = new byte[byteSize];
 //                clientInput.read(bytes);
@@ -37,16 +37,16 @@ public class ProjectManagementClient {
 //                System.out.println(new String(bytes, StandardCharsets.UTF_8));
 //
 //                System.out.println("------ ------ ------");
-            }
+            //}
 
 //            sleep(5000);
 //            bytes = " Whats up? ".getBytes();
 //            clientOutput.write(bytes);
-        } catch (IOException ex) {
-            Logger.getLogger(ProjectManagementClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ProjectManagementClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (IOException ex) {
+//            Logger.getLogger(ProjectManagementClient.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(ProjectManagementClient.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
 }

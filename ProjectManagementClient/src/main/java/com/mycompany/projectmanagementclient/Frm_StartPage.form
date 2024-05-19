@@ -33,8 +33,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txt_username" pref="130" max="32767" attributes="0"/>
                           <Component id="txt_password" max="32767" attributes="0"/>
-                          <Component id="txt_username" min="-2" pref="130" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -47,7 +47,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="txt_serverAddress" max="32767" attributes="0"/>
+                      <Component id="txt_serverAddress" pref="99" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -113,8 +113,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_usernameActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txt_password">
-    </Component>
     <Component class="javax.swing.JToggleButton" name="btn_login">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -149,7 +147,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txt_serverAddress">
       <Properties>
-        <Property name="text" type="java.lang.String" value="127.0.0.1"/>
+        <Property name="text" type="java.lang.String" value="68.219.245.201"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_serverAddressActionPerformed"/>
@@ -159,6 +157,8 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="5000"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="txt_password">
     </Component>
   </SubComponents>
 </Form>

@@ -140,7 +140,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txt_registerServerAddress">
       <Properties>
-        <Property name="text" type="java.lang.String" value="127.0.0.1"/>
+        <Property name="text" type="java.lang.String" value="68.219.245.201"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_registerServerAddressActionPerformed"/>

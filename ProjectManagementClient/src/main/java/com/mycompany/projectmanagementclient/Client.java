@@ -119,7 +119,7 @@ public class Client extends Thread {
                 }
             } catch (IOException e) {
                 System.out.println("No data available to read.");
-                // Handle the case where no data is available
+                
             }
         });
 

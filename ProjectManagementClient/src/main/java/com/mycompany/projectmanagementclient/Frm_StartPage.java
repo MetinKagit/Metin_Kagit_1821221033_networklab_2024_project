@@ -39,13 +39,13 @@ public class Frm_StartPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txt_username = new javax.swing.JTextField();
-        txt_password = new javax.swing.JTextField();
         btn_login = new javax.swing.JToggleButton();
         btn_register = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_serverAddress = new javax.swing.JTextField();
         txt_serverPort = new javax.swing.JTextField();
+        txt_password = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +79,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
 
         jLabel4.setText("Server Port:");
 
-        txt_serverAddress.setText("127.0.0.1");
+        txt_serverAddress.setText("68.219.245.201");
         txt_serverAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_serverAddressActionPerformed(evt);
@@ -101,8 +101,8 @@ public class Frm_StartPage extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_password)
-                            .addComponent(txt_username, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txt_username, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                            .addComponent(txt_password)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,7 +111,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
-                        .addComponent(txt_serverAddress))
+                        .addComponent(txt_serverAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(44, 44, 44)
@@ -253,7 +253,7 @@ public class Frm_StartPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txt_password;
+    private javax.swing.JPasswordField txt_password;
     private javax.swing.JTextField txt_serverAddress;
     private javax.swing.JTextField txt_serverPort;
     private javax.swing.JTextField txt_username;

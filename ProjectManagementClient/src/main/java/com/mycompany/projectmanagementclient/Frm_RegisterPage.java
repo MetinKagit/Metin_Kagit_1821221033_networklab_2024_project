@@ -73,7 +73,7 @@ public class Frm_RegisterPage extends javax.swing.JFrame {
 
         jLabel4.setText("Server Port:");
 
-        txt_registerServerAddress.setText("127.0.0.1");
+        txt_registerServerAddress.setText("68.219.245.201");
         txt_registerServerAddress.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_registerServerAddressActionPerformed(evt);

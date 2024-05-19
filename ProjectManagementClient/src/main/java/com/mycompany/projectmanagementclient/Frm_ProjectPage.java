@@ -69,6 +69,7 @@ public class Frm_ProjectPage extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel3.setText("Project Page");
 
+        btn_sendMessage.setBackground(new java.awt.Color(204, 218, 237));
         btn_sendMessage.setText("Send Message");
         btn_sendMessage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

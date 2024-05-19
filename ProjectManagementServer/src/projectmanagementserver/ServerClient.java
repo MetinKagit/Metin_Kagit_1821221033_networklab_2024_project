@@ -19,7 +19,8 @@ import org.json.JSONObject;
 
 /**
  *
- * @author metinkagit 1821221033
+ * @author metinkagit 
+ * 1821221033
  */
 public class ServerClient extends Thread {
 
@@ -161,9 +162,6 @@ public class ServerClient extends Thread {
 
             String[] messages = MessageDAO.getMessagesByUserId(userId);
             System.out.println("Message Query:");
-//            for (String row : messages) {
-//                System.out.println(row);
-//            }
 
             JSONArray messagesJsonArray = new JSONArray();
 
@@ -197,25 +195,25 @@ public class ServerClient extends Thread {
 
                     System.out.println("code : " + code);
                     if (code.equals("000")) {
-                        System.out.println("Log 21");
+                        System.out.println("Registeration process...");
                         RegisterProcess(jsonObject);
                     } else if (code.equals("001")) {
-                        System.out.println("Log 22");
+                        System.out.println("Login process...");
                         LoginProcess(jsonObject);
                     } else if (code.equals("002")) {
-                        System.out.println("Log 23");
+                        System.out.println("Project creating...");
                         CreateProjectProcess(jsonObject);
                     } else if (code.equals("003")) {
-                        System.out.println("Log 24");
+                        System.out.println("Joining the project...");
                         JoinProjectProcess(jsonObject);
                     } else if (code.equals("004")) {
-                        System.out.println("Log 25");
+                        System.out.println("Open project page");
                         OpenProjectProcess(jsonObject);
                     } else if (code.equals("005")) {
-                        System.out.println("Log 25");
+                        System.out.println("Message sending...");
                         SendMessageProcess(jsonObject);
                     } else if (code.equals("006")) {
-                        System.out.println("Log 25");
+                        System.out.println("Messages fetching...");
                         GetMessagesByUserId(jsonObject);
                     }
                 }

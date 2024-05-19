@@ -259,6 +259,7 @@ public class Frm_HomePage extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel6.setText("Message Box:");
 
+        btn_refreshMessageBox.setBackground(new java.awt.Color(204, 218, 237));
         btn_refreshMessageBox.setText("Refresh Message Box");
         btn_refreshMessageBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
